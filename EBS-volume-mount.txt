@@ -1,0 +1,40 @@
+steps:
+
+1> Create an instance > Select t2.micro as instance type 
+    Give existing key_pairs > Allow SSH and HTTP
+   Check Availability zone of running instance
+
+2> Go to EBS > Volumes > Create new Volume 
+
+   Volume type : General Purpose SSD
+   Size : 20 Gib 
+   Availability zone : Create in same Az as of your instance
+   Tags: name : sweety-volume (optional)
+
+3> Select Volume > Actions > Attach Volume
+   Select the running instance from the drop-down list
+   device name : /dev/sdf
+
+4> Go to Mobaxterm > new session > SSH > username : ec2-user 
+   adv. SSH setting : give .pem file > OK > Accept
+
+5> sudo su
+   df -h                  ---> to check disk space usage
+   lsblk                  --->nothing is mounted currently
+   file -s /dev/xvdf      ---> to check if any file system is attached
+   mkfs -t xfs /dev/xvdf  ---> to allocate file system
+   file -s /dev/xvdf      ---> now SGI XFS file system is attached
+   mkdir /mnt/sweety-dir  --->making a directory
+   pwd
+   cd /mnt/sweety-dir
+   mount /dev/xvdf /mnt/sweety-dir  --> partition mounted on my directory
+   df -h 
+
+	output	: /dev/xvdf-----20G------/mnt/sweety-dir  (MOUNTED)
+ 
+6> You can tally it by:
+   Go to instance id > Storage > Block device > EBS Volume ---/dev/sdf of 20G
+
+Hence EBS volume is successfully mounted on ec2 instance 
+      
+   
